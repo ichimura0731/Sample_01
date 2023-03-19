@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ランダム発表者と評価者</title>
+    <style type="text/css">
+        #resultTable {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+        #resultTable td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>発表時順番抽選</h2>
+
+    <div style="float: left;">
+        <p id="presenter" style="font-size: 24px; font-weight: bold;"></p>
+        <p id="evaluator" style="font-size: 24px; font-weight: bold;"></p><br><br>
+
+        <label for="namelist">名前を改行で区切って入力してください:</label><br>
+        <textarea id="namelist"></textarea><br><br>
+        <button onclick="select()">選択</button><br><br>
+    </div>
+
+    <div style="width:100%; text-align:center;">
+        <table id="resultTable" style="display:inline-block;">
+            <tr><td>No</td><td>発表者</td><td>評価者</td></tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        var presenters = [];
+        var evaluators = [];
+        var count = 0;
+
+         function select() {
+             var names = document.getElementById("namelist").value.split("¥n");
+             if (presenters.length == names.length) {
+                 presenters = [];
+                 document.getElementById("presenter").innerHTML = "抽選終了";
+                 document.getElementById("evaluator").innerHTML = "";
+                 return;
+             }
+             if (evaluators.length == names.length) {
+                 evaluators = [];
+             }
+
+             var presenterIndex;
+             do {
+                 presenterIndex = Math.floor(Math.random() * names.length);
+             } while (presenters.includes(presenterIndex));
+             presenters.push(presenterIndex);
+             var presenter = names[presenterIndex];
+             document.getElementById("presenter").innerHTML = "発表者: " + presenter;
+
+              var evaluatorIndex;
+              do {
+                  evaluatorIndex = Math.floor(Math.random() * names.length);
+              } while (evaluatorIndex == presenterIndex || evaluators.includes(evaluatorIndex));
+              evaluators.push(evaluatorIndex);
+              var evaluator = names[evaluatorIndex];
+              document.getElementById("evaluator").innerHTML = "評価者: " + evaluator;
+
+              count++;
+              var row = document.createElement("tr");
+              row.innerHTML += "<td>" + count + "</td>";
+              row.innerHTML += "<td>" + presenter + "</td>";
+              row.innerHTML += "<td>" + evaluator + "</td>";
+              document.getElementById("resultTable").appendChild(row);
+          }
+      </script>
+  </body>
+  </html> 
